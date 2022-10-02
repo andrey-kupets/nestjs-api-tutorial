@@ -9,3 +9,24 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  createdat DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String
+  hash String
+
+  firstName String?
+  lastName String?
+}
+model Bookmark {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  createdat DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title String
+  description String?
+  link String
+}
