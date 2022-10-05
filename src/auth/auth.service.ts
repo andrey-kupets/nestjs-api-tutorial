@@ -28,7 +28,7 @@ export class AuthService {
       delete user.hash;
 
       return user;
-    } catch (error) {
+    } catch (error) { // doesn't catch despite @unique in the model
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           throw new ForbiddenException(' Credentials taken');

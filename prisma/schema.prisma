@@ -15,7 +15,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String @unique
+  email String @unique // don't work with mongodb, unique index must be written manually
   hash  String
 
   firstName String?
