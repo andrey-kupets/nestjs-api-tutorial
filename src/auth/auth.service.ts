@@ -1,9 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { UserService } from '../user/user.service';
-
+import { ForbiddenException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as argon from 'argon2';
 
+import { PrismaService } from '../prisma/prisma.service';
+import { UserService } from '../user/user.service';
 import { AuthDto } from './dto';
 
 @Injectable()
@@ -11,9 +10,9 @@ export class AuthService {
   constructor(private prismaService: PrismaService, private userService: UserService) {}
 
   async signup(dto: AuthDto) {
-    const userByEmailInDb = await this.userService.getUserByEmail(dto.email);
+    const signedUpUser = await this.userService.getUserByEmail(dto.email);
 
-    if (userByEmailInDb) {
+    if (signedUpUser) {
       throw new HttpException('Credentials taken', HttpStatus.FORBIDDEN);
     }
 
@@ -31,7 +30,20 @@ export class AuthService {
     return user;
   }
 
-  signin() {
-    return {msg: "i've signed in"};
+  async signin(dto: AuthDto) {
+    const user = await this.userService.getUserByEmail(dto.email);
+
+    if (!user) {
+      throw new ForbiddenException('Credentials incorrect');
+    }
+
+    const pwMatches = await argon.verify(user.hash, dto.password);
+
+    if (!pwMatches) {
+      throw new ForbiddenException('Credentials incorrect');
+    }
+
+    delete user.hash;
+    return user;
   }
 }

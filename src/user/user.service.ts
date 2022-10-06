@@ -8,7 +8,7 @@ export class UserService {
   constructor(private prismaService: PrismaService) {}
 
   getUserByEmail(email: string):Promise<User> {
-    return this.prismaService.user.findFirst({
+    return this.prismaService.user.findUnique({
       where: { email }
     });
   }
