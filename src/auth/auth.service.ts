@@ -14,7 +14,7 @@ export class AuthService {
     const userByEmailInDb = await this.userService.getUserByEmail(dto.email);
 
     if (userByEmailInDb) {
-      throw new HttpException('Credentials taken', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Credentials taken', HttpStatus.FORBIDDEN);
     }
 
     const hash = await argon.hash(dto.password);
