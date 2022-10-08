@@ -1,5 +1,6 @@
-import { ForbiddenException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as argon from 'argon2';
+import { ForbiddenException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
@@ -7,7 +8,11 @@ import { AuthDto } from './dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private prismaService: PrismaService, private userService: UserService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private userService: UserService,
+    private jwt: JwtService,
+    ) {}
 
   async signup(dto: AuthDto) {
     const signedUpUser = await this.userService.getUserByEmail(dto.email);
