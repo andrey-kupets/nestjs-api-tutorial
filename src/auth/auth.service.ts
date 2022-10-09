@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { AuthDto } from './dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private prismaService: PrismaService,
     private userService: UserService,
     private jwt: JwtService,
+    private config: ConfigService,
     ) {}
 
   async signup(dto: AuthDto) {
@@ -30,8 +32,7 @@ export class AuthService {
       },
     });
 
-    delete user.hash;
-    return user;
+    return this.signToken(user.id, user.email);
   }
 
   async signin(dto: AuthDto) {
@@ -47,7 +48,25 @@ export class AuthService {
       throw new ForbiddenException('Credentials incorrect');
     }
 
-    delete user.hash;
-    return user;
+    return this.signToken(user.id, user.email);
+  }
+
+  // add to helper file
+  async signToken (userId: string, email: string): Promise<{ access_token: string }> {
+    const payload = {
+      sub: userId,
+      email
+    };
+
+    const secret = this.config.get('JWT_SECRET');
+
+    const token = await this.jwt.signAsync(payload, {
+      expiresIn: '15m',
+      secret,
+    });
+
+    return {
+      access_token: token,
+    }
   }
 }
