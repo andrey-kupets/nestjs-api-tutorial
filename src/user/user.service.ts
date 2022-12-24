@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { EditUserDto } from "./dto";
 
 @Injectable()
 export class UserService {
@@ -12,4 +13,6 @@ export class UserService {
       where: { email }
     });
   }
+
+  async editUser(userId: number, dto: EditUserDto) {}
 }
