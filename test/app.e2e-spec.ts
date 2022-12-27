@@ -5,6 +5,7 @@ import * as pactum from 'pactum';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto';
+import { EditUserDto } from "../src/user/dto";
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -30,6 +31,8 @@ describe('App e2e', () => {
     prisma = app.get(PrismaService);
     await prisma.cleanDb();
     pactum.request.setBaseUrl('http://localhost:3333');
+    // pactum.request.setBaseUrl('mongodb+srv://admin:admin@cluster0.20kd4zz.mongodb.net/nest-test?retryWrites=true&w=majority');
+
   });
 
   afterAll(() => {
@@ -129,10 +132,28 @@ describe('App e2e', () => {
             Authorization: 'Bearer $S{userAt}'
           })
           .expectStatus(200);
-      })
+      });
     });
 
-    describe('Edit user', () => {});
+    describe('Edit user', () => {
+      it('should edit user', () => {
+        const dto: EditUserDto = {
+          firstName: 'Andrey',
+          email: 'andrey@gmail.com',
+        }
+
+        return pactum
+          .spec()
+          .patch('/users')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}'
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.email);
+      });
+    });
   });
 
   describe('Bookmarks', () => {
