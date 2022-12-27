@@ -12,7 +12,7 @@ describe('App e2e', () => {
   let prisma: PrismaService;
 
   beforeAll(async () => {
-    // jest.setTimeout(20000); Use jest.setTimeout(newTimeout) to increase the
+    jest.setTimeout(20000); //Use jest.setTimeout(newTimeout) to increase the
     //                         timeout value, if this is a long-running test.
     const moduleRef =
       await Test.createTestingModule({
@@ -31,8 +31,6 @@ describe('App e2e', () => {
     prisma = app.get(PrismaService);
     await prisma.cleanDb();
     pactum.request.setBaseUrl('http://localhost:3333');
-    // pactum.request.setBaseUrl('mongodb+srv://admin:admin@cluster0.20kd4zz.mongodb.net/nest-test?retryWrites=true&w=majority');
-
   });
 
   afterAll(() => {
@@ -151,7 +149,8 @@ describe('App e2e', () => {
           .withBody(dto)
           .expectStatus(200)
           .expectBodyContains(dto.firstName)
-          .expectBodyContains(dto.email);
+          .expectBodyContains(dto.email)
+          .inspect();
       });
     });
   });
