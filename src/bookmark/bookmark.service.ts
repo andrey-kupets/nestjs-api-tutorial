@@ -1,14 +1,15 @@
 import { Delete, Get, Injectable, Patch } from "@nestjs/common";
+import { CreateBookmarkDto, EditBookmarkDto } from "./dto";
 
 @Injectable()
 export class BookmarkService {
-  createBookmark() {}
+  createBookmark(userId: string, dto: CreateBookmarkDto) {}
 
-  getBookmarks() {}
+  getBookmarks(userId: string) {}
 
-  getBookmarkById() {}
+  getBookmarkById(userId: string, bookmarkId: string) {}
 
-  editBookmarkById() {}
+  editBookmarkById(userId: string, dto: EditBookmarkDto) {}
 
-  deleteBookmarkById() {}
+  deleteBookmarkById(userId: string, bookmarkId: string) {}
 }
