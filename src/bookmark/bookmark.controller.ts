@@ -25,10 +25,19 @@ export class BookmarkController {
   createBookmark(
     @GetUser('id') userId: string,
     @Body() dto: CreateBookmarkDto,
-  ) {}
+  ) {
+    return this.bookmarkService.createBookmark(
+      userId,
+      dto,
+    );
+  }
 
   @Get()
-  getBookmarks(@GetUser('id') userId: string) {}
+  getBookmarks(@GetUser('id') userId: string) {
+    return this.bookmarkService.getBookmarks(
+      userId,
+    );
+  }
 
   @Get(':id')
   getBookmarkById(
@@ -36,13 +45,27 @@ export class BookmarkController {
     @Param('id',
       // ParseIntPipe
     ) bookmarkId: string,
-  ) {}
+  ) {
+    return this.bookmarkService.getBookmarkById(
+      userId,
+      bookmarkId,
+    );
+  }
 
-  @Patch()
+  @Patch(':id')
   editBookmarkById(
     @GetUser('id') userId: string,
+    @Param('id',
+      // ParseIntPipe
+    ) bookmarkId: string,
     @Body() dto: EditBookmarkDto,
-  ) {}
+  ) {
+    return this.bookmarkService.editBookmarkById(
+      userId,
+      bookmarkId,
+      dto,
+    );
+  }
 
   @Delete(':id')
   deleteBookmarkById(
@@ -50,5 +73,10 @@ export class BookmarkController {
     @Param('id',
       // ParseIntPipe
     ) bookmarkId: string,
-  ) {}
+  ) {
+    return this.bookmarkService.deleteBookmarkById(
+      userId,
+      bookmarkId,
+    );
+  }
 }

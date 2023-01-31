@@ -9,7 +9,7 @@ export class BookmarkService {
 
   getBookmarkById(userId: string, bookmarkId: string) {}
 
-  editBookmarkById(userId: string, dto: EditBookmarkDto) {}
+  editBookmarkById(userId: string, bookmarkId: string, dto: EditBookmarkDto) {}
 
   deleteBookmarkById(userId: string, bookmarkId: string) {}
 }
